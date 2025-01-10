@@ -1,18 +1,12 @@
-import streamlit as st
-import pandas as pd
-import plotly.express as px
 
-# Title
-st.title("Simple Streamlit App")
+import requests
 
-# Create a DataFrame
-data = pd.DataFrame({
-    "x": [1, 2, 3, 4, 5],
-    "y": [10, 20, 30, 40, 50]
-})
-
-# Plot using Plotly
-fig = px.line(data, x="x", y="y", title="Sample Line Chart")
-
-# Display the chart
-st.plotly_chart(fig)
+def get_crypto_price(symbol):
+    url = f"https://api.coingecko.com/api/v3/simple/price?ids={symbol}&vs_currencies=usd"
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        data = response.json()
+        return data[symbol]['usd']
+    else:
+        raise Exception("Error fetching data from CoinGecko API")
